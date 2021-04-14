@@ -14,11 +14,12 @@ module.exports = {
         'SwitchCase': 1
       }
     ],
-    semi: ['warn', 'always']
+    semi: ['warn', 'always'],
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   },
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module'
   },
   ignorePatterns: ['node_modules/', 'build/'],
-}
+};
