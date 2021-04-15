@@ -1,21 +1,18 @@
 
 import { Resolver, Mutation, Arg, UseMiddleware} from 'type-graphql';
 import {User, UserModel} from '../../models/User';
-import {UpdateUserRoleInput} from './inputs';
 import {UserInputError} from 'apollo-server';
 import {RoleModel} from '../../models/Role';
 import {isAuth, Operation} from '../../middleware/isAuth';
 
 @Resolver(() => User)
-export class UpdateRoleResolver{
+export class UpdateUserRoleResolver{
 
   @Mutation(() => User, {nullable: true})
   @UseMiddleware(isAuth('User', [Operation.Update]))
-  async updateRoleByID(
+  async updateUserRoleByID(
     @Arg('id') id: string,
-    @Arg('data') data: UpdateUserRoleInput): Promise<User> {
-    const {role} = data;
-
+    @Arg('role') role: string): Promise<User | null> {
 
     const roleModel = await RoleModel.findOne({name: role});
     if(!roleModel){
@@ -26,7 +23,7 @@ export class UpdateRoleResolver{
       });
     }
 
-    const user = (await UserModel.findByIdAndUpdate(id, {roleID: roleModel._id}));
+    const user = await UserModel.findByIdAndUpdate(id, {accessLevel: role});
 
     if(!user){
       throw new UserInputError('User does not exist', {
@@ -35,7 +32,7 @@ export class UpdateRoleResolver{
         }
       });
     }
-    return user;
+    return UserModel.findById(id); 
   }
   
 }

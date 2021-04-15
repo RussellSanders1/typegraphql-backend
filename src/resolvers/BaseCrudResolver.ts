@@ -2,7 +2,8 @@ import {ReturnModelType, DocumentType} from '@typegoose/typegoose';
 import {BeAnObject} from '@typegoose/typegoose/lib/types';
 import {GraphQLJSONObject} from 'graphql-type-json';
 import {UpdateQuery} from 'mongoose';
-import {Arg, Int, Mutation, Query, Resolver, ClassType, UseMiddleware} from 'type-graphql';
+import {InputType} from 'node:zlib';
+import {Arg, Int, Mutation, Query, Resolver, ClassType, UseMiddleware, ResolverInterface} from 'type-graphql';
 import {MiddlewareFn} from 'type-graphql/dist/interfaces/Middleware';
 import {isAuth, Operation} from '../middleware/isAuth';
 
@@ -20,11 +21,12 @@ interface IBaseResolver<T extends ClassType>{
 }
 
 
-export function createResolver<T extends ClassType, X extends ClassType>(
+export function createResolver<T extends ClassType, X extends ClassType, Y extends ClassType>(
   collectionName: string,
   returnType: T,
   model: ReturnModelType<T, BeAnObject>,
   createInputType: X,
+  updateInputType: Y,
   middleware?: MiddlewareFn<any>[]
 ) {
   @Resolver({isAbstract: true})
@@ -41,14 +43,14 @@ export function createResolver<T extends ClassType, X extends ClassType>(
     async getAll(
         @Arg('first', () => Int) first: number,
     ): Promise<T[]> {
-      return (await model.find()).slice(0,first);
+      return (await model.find()).slice(0,first); 
     }
 
     @Query(() => returnType, { name: `getAll${collectionName}s` })
     @UseMiddleware(...(middleware || []),isAuth(collectionName, [Operation.Read]))
     async getByID(
         @Arg('first') id: string,
-    ): Promise<T | null> {
+    ): Promise<T | null> { 
       return (await model.findById(id));
     }
 
@@ -65,14 +67,14 @@ export function createResolver<T extends ClassType, X extends ClassType>(
       return true;
     }
 
-    // @Mutation(() => returnType, {name: `update${collectionName}ByID`})
-    // @UseMiddleware(...(middleware || []),isAuth(collectionName,[Operation.Update]))
-    // async updateByID(
-    //   @Arg('id') id: string,
-    //   @Arg('data', () => updateInputType) data: UpdateQuery<DocumentType<InstanceType<T>>>
-    // ): Promise<T| null> {
-    //   return model.findByIdAndUpdate(id, data);
-    // }
+    @Mutation(() => returnType, {name: `update${collectionName}ByID`})
+    @UseMiddleware(...(middleware || []),isAuth(collectionName,[Operation.Update]))
+    async updateByID(
+      @Arg('id') id: string,
+      @Arg('data', () => updateInputType) data: UpdateQuery<DocumentType<InstanceType<T>>>
+    ): Promise<T| null> {
+      return model.findByIdAndUpdate(id, data);
+    }
 
 
   }

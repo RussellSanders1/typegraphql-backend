@@ -4,31 +4,30 @@ import {Ref} from '../types/Ref';
 import {Role} from './Role';
 
 
-@InputType()
 @ObjectType({ description: 'Permission model'})
 export class Permission {
   // @Field(() => Role)
   // @Prop({required: false})
   // role: Ref<Role>;
 
-  // @Prop({required: true})
+  @Prop({required: true})
     @Field()
     collectionName: string;
 
-    // @Prop({required: true, default: false})
-    @Field()
+    @Prop({required: true, default: false})
+    @Field({defaultValue: false})
     create: boolean;
 
-    // @Prop({required: true, default: false})
-    @Field()
+    @Prop({required: true, default: false})
+    @Field({defaultValue: false})
     read: boolean;
 
-    // @Prop({required: true, default: false})
-    @Field()
+    @Prop({required: true, default: false})
+    @Field({defaultValue: false})
     update: boolean;
 
-    // @Prop({required: true, default: false})
-    @Field()
+    @Prop({required: true, default: false}) 
+    @Field({defaultValue: false})
     delete: boolean;
     
     constructor(collectionName: string, create: boolean, read: boolean, update: boolean, del: boolean,){
@@ -40,4 +39,4 @@ export class Permission {
     }
 }
 
-// export const PermissionModel = getModelForClass(Permission);
+export const PermissionModel = getModelForClass(Permission);

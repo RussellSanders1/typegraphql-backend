@@ -2,7 +2,7 @@ import {getModelForClass, prop as Prop, DocumentType} from '@typegoose/typegoose
 import {IsEmail} from 'class-validator';
 import {generateToken} from '../resolvers/user/helpers';
 import {Field, ID, Int, ObjectType, Root, } from 'type-graphql';
-import {DefaultRole, Role, RoleModel} from './Role';
+import {Role, RoleModel} from './Role';
 import {Ref} from '../types/Ref';
 import {ObjectId} from 'mongoose';
 
@@ -37,13 +37,12 @@ export class User {
     @Prop({required: true})
     createdAt: Date;
 
-    @Field(() => String)
     @Prop({required: true})
-    roleID: ObjectId;
+    accessLevel: string;
 
     @Field(() => Role)
-    async role(@Root() user: any): Promise<Role | null> {
-      return await RoleModel.findById(user.roleID); 
+    async role(@Root() user: any): Promise<Role | null> { 
+      return await RoleModel.findOne({name: user.accessLevel}); 
     }
 
   // @Field()

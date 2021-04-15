@@ -5,6 +5,7 @@
 
 input CreateRoleInput {
   name: String!
+  permissions: [PermissionInput!]!
 }
 
 input LoginInput {
@@ -19,17 +20,27 @@ type Mutation {
   deleteUserByID(id: String!): Boolean!
   login(loginInput: LoginInput!): User
   register(registerInput: RegisterInput!): User
-  updateRoleByID(data: UpdateUserRoleInput!, id: String!): User
+  updateRoleByID(data: UpdateRoleInput!, id: String!): Role!
   updateUserByID(data: UpdateUserDataInput!, id: String!): User!
+  updateUserRoleByID(id: String!, role: String!): User
 }
 
 """Permission model"""
 type Permission {
   collectionName: String!
-  create: Boolean!
-  delete: Boolean!
-  read: Boolean!
-  update: Boolean!
+  create: Boolean
+  delete: Boolean
+  read: Boolean
+  update: Boolean
+}
+
+"""Permission model"""
+input PermissionInput {
+  collectionName: String!
+  create: Boolean = false
+  delete: Boolean = false
+  read: Boolean = false
+  update: Boolean = false
 }
 
 type Query {
@@ -48,7 +59,7 @@ input RegisterInput {
   password: String!
 }
 
-"""Permission model"""
+"""Role model"""
 type Role {
   name: String!
   permissions: [Permission!]!
@@ -59,14 +70,15 @@ The javascript `Date` as integer. Type represents date and time as number of mil
 """
 scalar Timestamp
 
+input UpdateRoleInput {
+  name: String!
+  permissions: [PermissionInput!]!
+}
+
 input UpdateUserDataInput {
   email: String
   firstName: String
   lastName: String
-}
-
-input UpdateUserRoleInput {
-  role: String!
 }
 
 """User model"""
@@ -78,5 +90,4 @@ type User {
   lastName: String!
   name: String!
   role: Role!
-  roleID: String!
 }

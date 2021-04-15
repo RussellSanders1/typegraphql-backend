@@ -4,7 +4,7 @@ import { MiddlewareFn } from 'type-graphql';
 import { MyContext } from '../types/MyContext';
 import {DocumentType, isRefType} from '@typegoose/typegoose';
 import {Role, RoleModel} from '../models/Role';
-import {Permission, PermissionModel} from '../models/Permission';
+import {Permission} from '../models/Permission';
 
 export enum Operation{
     Create = 'create',
@@ -29,16 +29,9 @@ export function isAuth(collectionName: string, operations: Operation[]): Middlew
     } 
     
     //resolve user's role
-    let role: Role | null;
-    if(isRefType(user.role)){
-      role = await RoleModel.findById(user.role);
-    } else {
-      role = user.role;
-    } 
+    const role = await RoleModel.findOne({name: user.accessLevel});
     
-    const permsFromRole = role!.permissions
-      .map(async (p) => isRefType(p) ?  await PermissionModel.findById(p) : p);
-
+    const permsFromRole = role!.permissions;
 
     //resolve permission to check from collectionName
     let permissionToCheck: Permission | null = null;

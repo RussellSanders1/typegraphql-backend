@@ -1,5 +1,4 @@
 import {ApolloServer} from 'apollo-server-express';
-import {MONGODB, SECRET_KEY} from '../config';
 import Express from 'express';
 import mongoose from 'mongoose';
 import 'reflect-metadata';
@@ -16,9 +15,13 @@ import {generateRoles} from './util/generateRoles';
 import {RoleResolver} from './resolvers/role/RoleCrud';
 import {createSchema} from './util/createSchema';
 import {generateAdmin} from './util/generateAdminAccount';
-
+import dotenv from 'dotenv';
 
 const main = async () => {
+  const env = dotenv.config();
+  if(env.error){
+    throw new Error('problem setting up environment variables');
+  }
   const schema = await createSchema();
   
   
@@ -42,7 +45,7 @@ const main = async () => {
         client: redis
       }),
       name: 'qid',
-      secret: SECRET_KEY,
+      secret: process.env.SECRET_KEY!,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -55,7 +58,7 @@ const main = async () => {
 
   server.applyMiddleware({app});
   
-  mongoose.connect(MONGODB, {useNewUrlParser: true, useUnifiedTopology: true})
+  mongoose.connect(process.env.MONGODB!, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(()=> {
       console.log('connectedToDB');
       return app.listen({port: 4000});

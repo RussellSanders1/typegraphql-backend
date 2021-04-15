@@ -1,6 +1,6 @@
 import {getModelForClass, prop as Prop } from '@typegoose/typegoose';
-import {Field, ID, Int, ObjectType, } from 'type-graphql';
-import {Permission} from './Permission';
+import {Field, ID, Int, ObjectType, Root, } from 'type-graphql';
+import {Permission, PermissionModel} from './Permission';
 import {Ref} from '../types/Ref';
 
 // export enum DefaultRole {
@@ -34,16 +34,24 @@ export const DefaultRolePermissions: PermissionObject[] = [
   },
 ];
 
-@ObjectType({ description: 'Permission model'})
+@ObjectType({ description: 'Role model'})
 export class Role {
 
     @Field()
     @Prop({required: true})
     name: string;
 
-    @Field(() => [Permission])
     @Prop({required: false})
-    permissions: Ref<Permission>[];
+    permissionIDs: Ref<Permission>[];
+
+    @Field(() => [Permission])
+    async permissions(@Root() role: any) {
+      const permissionArr= [];
+      for(const id of role.permissionIDs){
+        permissionArr.push(PermissionModel.findById(id));
+      }
+      return Promise.all(permissionArr);
+    }
     
 }
 

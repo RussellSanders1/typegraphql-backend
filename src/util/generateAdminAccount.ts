@@ -1,7 +1,6 @@
 import {RoleModel} from '../models/Role';
 import {UserModel} from '../models/User';
 import bcrypt from 'bcryptjs';
-import {ADMIN_INFO} from '../../config';
 
 export const generateAdmin = async () => {
   const adminRole = await RoleModel.findOne({name: 'Admin'});
@@ -10,19 +9,21 @@ export const generateAdmin = async () => {
     throw new Error('Server setup error: Admin role does not exist');
   }
 
-  const findAdmin = await UserModel.findOne({email: ADMIN_INFO.email});
+  const findAdmin = await UserModel.findOne({email: process.env.ADMIN_EMAIL!});
   if(findAdmin){
     return;
   }
-
+  
   //hash admin password
-  const password = await bcrypt.hash(ADMIN_INFO.password, 12);
+  const password = await bcrypt.hash(process.env.ADMIN_PASSWORD!, 12);
   
   //save admin user to DB
   await (await UserModel.create({
-    ...ADMIN_INFO,
-    password,
-    roleID: adminRole._id,
+    firstName: process.env.ADMIN_FIRSTNAME!,
+    lastName: process.env.ADMIN_LASTNAME!,
+    email: process.env.ADMIN_EMAIL,
+    password, 
+    accessLevel: 'Admin',
     createdAt: new Date()
   })).save();
 };

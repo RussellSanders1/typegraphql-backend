@@ -58,9 +58,3 @@ export class UpdateUserDataInput {
     @IsEmailUnique()
     email?: string;
 }
-
-@InputType()
-export class UpdateUserRoleInput {
-    @Field()
-    role: string;
-}
