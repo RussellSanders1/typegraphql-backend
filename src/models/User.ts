@@ -37,13 +37,9 @@ export class User {
     @Prop({required: true})
     createdAt: Date;
 
-    @Prop({required: true})
-    accessLevel: string;
-
     @Field(() => Role)
-    async role(@Root() user: any): Promise<Role | null> { 
-      return await RoleModel.findOne({name: user.accessLevel}); 
-    }
+    @Prop({required: true, type: () => [Role]}) 
+    role: Ref<Role>;
 
   // @Field()
   // token?(): string{

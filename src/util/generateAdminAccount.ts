@@ -23,7 +23,7 @@ export const generateAdmin = async () => {
     lastName: process.env.ADMIN_LASTNAME!,
     email: process.env.ADMIN_EMAIL,
     password, 
-    accessLevel: 'Admin',
+    role: adminRole,
     createdAt: new Date()
   })).save();
 };

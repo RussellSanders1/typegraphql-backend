@@ -4,43 +4,41 @@ import {Permission, PermissionModel,} from '../models/Permission';
 import {DefaultRolePermissions, PermissionObject, RoleModel} from '../models/Role';
 import {DocumentType} from '@typegoose/typegoose';
 
-const generatePermissionsForFile = async (fullPath: string, role: PermissionObject) => {
+const generatePermissionsForFile = async (fullPath: string, role: PermissionObject): Promise<DocumentType<Permission>> => {
   
-  if(!fs.statSync(fullPath).isDirectory()) {
-    const name = basename(fullPath, '.ts');
+  const name = basename(fullPath, '.ts');
 
-    const perm = await (await PermissionModel.create({
-      collectionName: name, //collectionName 
-      create: role.create, //create
-      read: role.read, //read
-      update: role.update, //update
-      delete: role.delete //delete
-    })).save();
+  const perm = await (await PermissionModel.create({
+    collectionName: name, //collectionName 
+    create: role.create, //create
+    read: role.read, //read
+    update: role.update, //update
+    delete: role.delete //delete
+  })).save();
 
-    console.log({perm});
-    return perm;
-  }
+  return perm;
 };
 
 export const generateRoles = async () => {
   const generateRolesForDirectory = async (directory: string) => {
     for(const role of DefaultRolePermissions){
-      const newRole = await RoleModel.findOne({name: role.name});
-      let perms: Promise<DocumentType<Permission> | undefined>[] = [];
+      const existingRole = await RoleModel.findOne({name: role.name});
+      let perms: Promise<DocumentType<Permission>>[] = [];
       for( const file of fs.readdirSync(directory)){ 
         const fullPath = `${directory}/${file}`;
-        const newPerm = generatePermissionsForFile(fullPath, role);
-        // console.log({newPerm});
-        if(newPerm){
-          perms = perms.concat(newPerm); 
+        if(!fs.statSync(fullPath).isDirectory()){
+          const newPerm = generatePermissionsForFile(fullPath, role);
+          if(newPerm){
+            perms = perms.concat(newPerm); 
+          }
         }
       }
-      
-      if(newRole){
+      const resolvedPerms = await Promise.all(perms);
+      if(existingRole){
         //update existing roles
-        const toSave = await RoleModel.findByIdAndUpdate(newRole._id, {
+        const toSave = await RoleModel.findByIdAndUpdate(existingRole._id, {
           name: role.name, 
-          permissionIDs: (await Promise.all(perms)).map(p => p?._id)
+          permissions: resolvedPerms
         });
         if(toSave){
           toSave.save();
@@ -49,7 +47,7 @@ export const generateRoles = async () => {
         //create new roles
         const toSave = await RoleModel.create({
           name: role.name, 
-          permissions: perms
+          permissions: resolvedPerms
         });
         if(toSave){
           toSave.save();

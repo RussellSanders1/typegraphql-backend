@@ -41,17 +41,9 @@ export class Role {
     @Prop({required: true})
     name: string;
 
-    @Prop({required: false})
-    permissionIDs: Ref<Permission>[];
-
     @Field(() => [Permission])
-    async permissions(@Root() role: any) {
-      const permissionArr= [];
-      for(const id of role.permissionIDs){
-        permissionArr.push(PermissionModel.findById(id));
-      }
-      return Promise.all(permissionArr);
-    }
+    @Prop({required: true, type: () => [Permission]})
+    permissions: Ref<Permission>[];
     
 }
 
