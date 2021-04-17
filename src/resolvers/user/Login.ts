@@ -4,7 +4,7 @@ import {User, UserModel} from '../../models/User';
 import {LoginInput} from './inputs';
 import {UserInputError} from 'apollo-server';
 import bcrypt from 'bcryptjs';
-import {MyContext} from '../../types/MyContext';
+import {MyContext} from '../../contexts/MyContext';
 
 @Resolver(() => User)
 export class LoginResolver{

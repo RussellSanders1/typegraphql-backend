@@ -39,14 +39,7 @@ export class User {
     @Prop({ref: () => Role, autopopulate: true}) 
     role: Ref<Role>;
 
-  // @Field(() => Role)
-  // async role(@Root() user: any): Promise<Role | null> {
-  //   return RoleModel.findById(user.roleID); 
-  // }
-  // @Field()
-  // token?(): string{
-  //   return generateToken(this);
-  // }
 }
 
-export const UserModel = getModelForClass(User);
+
+export const UserModel = getModelForClass(User, {schemaOptions: {timestamps: true}});

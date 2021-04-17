@@ -1,10 +1,10 @@
 
 import { Resolver, Mutation, Arg} from 'type-graphql';
-import {User, UserModel} from '../../models/User';
+import {User, UserModel} from '@models/User';
 import {RegisterInput} from './inputs';
 import {UserInputError} from 'apollo-server';
 import bcrypt from 'bcryptjs';
-import {RoleModel} from '../../models/Role';
+import {RoleModel} from '@models/Role';
 import {UserResolver} from './UserCrud';
 
 @Resolver(() => User)

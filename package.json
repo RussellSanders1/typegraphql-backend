@@ -7,7 +7,12 @@
     "start": "ts-node-dev --respawn -r tsconfig-paths/register src/index.ts",
     "build": "tsc --project ./",
     "lint": "eslint ./ --ext ts,tsx,js,jsx",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "stop-redis": "docker stop cookie-redis",
+    "rm-redis": "docker rm cookie-redis",
+    "build-redis": "docker build -t redis .;",
+    "start-redis": "docker run --name cookie-redis -dp 6379:6379 redis",
+    "redis": "npm run stop-redis; npm run rm-redis; npm run build-redis; npm run start-redis"
   },
   "browserslist": "defaults",
   "keywords": [],
