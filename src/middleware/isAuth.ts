@@ -23,7 +23,6 @@ export function isAuth(collectionName: string, operations: Operation[]): Middlew
     
     //get user
     const user = await UserModel.findById(id);
-    console.log({user});
     if(!user){
       throw new Error('User does not exist');
     } 
@@ -42,7 +41,6 @@ export function isAuth(collectionName: string, operations: Operation[]): Middlew
       }
     }
 
-    console.log(permissionToCheck!);
     //fail fast if null or false on ANY operation
     for(const operation of operations){
       if(!permissionToCheck || (!permissionToCheck[operation])){

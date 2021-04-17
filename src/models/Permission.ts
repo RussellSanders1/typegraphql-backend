@@ -1,11 +1,12 @@
 import {getModelForClass, prop as Prop} from '@typegoose/typegoose';
+import {collectionNames} from '@util/collectionNames';
 import {Field, ObjectType} from 'type-graphql';
 
 
 @ObjectType({ description: 'Permission model'})
 export class Permission {
 
-  @Prop({required: true})
+  @Prop({required: true, enum: collectionNames})
   @Field()
   collectionName: string;
 

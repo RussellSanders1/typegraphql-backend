@@ -10,6 +10,7 @@ import {generateRoles} from './util/generateRoles';
 import {createSchema} from './util/createSchema';
 import {generateAdmin} from './util/generateAdminAccount';
 import dotenv from 'dotenv';
+import {collectionNames} from '@util/collectionNames';
 
 const main = async () => {
   const env = dotenv.config();
@@ -53,11 +54,12 @@ const main = async () => {
   
   mongoose.connect(process.env.MONGODB!, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(()=> {
-      console.log('connectedToDB');
+      console.log('connected @ localhost:4000/graphql');
       return app.listen({port: 4000});
     }).then(async () => {
       await generateRoles();
       await generateAdmin();
+      console.log({collectionNames});
     });
 };
 
