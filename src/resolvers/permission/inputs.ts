@@ -2,9 +2,6 @@ import {Field, InputType} from 'type-graphql';
 
 @InputType({ description: 'Permission model'})
 export class PermissionInput {
-  // @Field(() => Role)
-  // @Prop({required: false})
-  // role: Ref<Role>;
 
   // @Prop({required: true})
     @Field()

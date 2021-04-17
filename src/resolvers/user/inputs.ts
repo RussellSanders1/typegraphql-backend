@@ -3,8 +3,6 @@ import { Equals, IsEmail, Length, MinLength } from 'class-validator';
 import {User} from '../../models/User';
 import {Match} from '../../util/validators/MatchValidator';
 import {IsEmailUnique} from './validators/EmailValidator';
-import {Role} from '../../models/Role';
-import {Ref} from '../../types/Ref';
 
 @InputType()
 export class LoginInput implements Partial<User> {

@@ -1,19 +1,14 @@
-import {getModelForClass, prop as Prop } from '@typegoose/typegoose';
-import {Field, ID, Int, ObjectType, Root, } from 'type-graphql';
-import {Permission, PermissionModel} from './Permission';
-import {Ref} from '../types/Ref';
-
-// export enum DefaultRole {
-//     Public = 'Public',
-//     Admin = 'admin'
-// }
+import {getModelForClass, modelOptions, plugin, prop as Prop, Ref } from '@typegoose/typegoose';
+import {Field, ObjectType, } from 'type-graphql';
+import {Permission} from './Permission';
+import autopopulate from 'mongoose-autopopulate';
 
 export interface PermissionObject {
-    name: string;
-    create: boolean;
-    read: boolean;
-    update: boolean;
-    delete: boolean;
+  name: string;
+  create: boolean;
+  read: boolean;
+  update: boolean;
+  delete: boolean;
 }
 
 
@@ -35,6 +30,7 @@ export const DefaultRolePermissions: PermissionObject[] = [
 ];
 
 @ObjectType({ description: 'Role model'})
+@plugin(autopopulate)
 export class Role {
 
     @Field()
@@ -42,8 +38,8 @@ export class Role {
     name: string;
 
     @Field(() => [Permission])
-    @Prop({required: true, type: () => [Permission]})
-    permissions: Ref<Permission>[];
+    @Prop({required: true, type: () => [Permission], ref: 'Permission', autopopulate: true})
+    permissions: Ref<Permission>[]; 
     
 }
 

@@ -19,7 +19,7 @@ export class LoginResolver{
       errors.general = 'User not found';
       throw new UserInputError('User not found', {errors});
     }
-    
+
     const match = await bcrypt.compare(password, user.password);
     if(!match){
       errors.general = 'Wrong credentials';

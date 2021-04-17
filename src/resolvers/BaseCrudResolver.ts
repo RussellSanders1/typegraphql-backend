@@ -34,8 +34,8 @@ export function createResolver<T extends ClassType, X extends ClassType, Y exten
 
     @Mutation(() => returnType, {name: `create${collectionName}`})
     @UseMiddleware(...(middleware || []), isAuth(collectionName, [Operation.Create]))
-    async create(@Arg('data', () => createInputType) data: X){
-      return (await model.create({...data, createdAt: new Date()})).save();
+    async create(@Arg('data', () => createInputType) data: any){
+      return model.create(data);
     }
   
     @Query(() => [returnType], { name: `getAll${collectionName}s` })
@@ -57,7 +57,7 @@ export function createResolver<T extends ClassType, X extends ClassType, Y exten
     @Query(() => Int, {name: `count${collectionName}`})
     @UseMiddleware(...(middleware || []),isAuth(collectionName, [Operation.Read]))
     async count(){
-      return model.count();
+      return model.count({});
     }
 
     @Mutation(() => Boolean, {name: `delete${collectionName}ByID`})

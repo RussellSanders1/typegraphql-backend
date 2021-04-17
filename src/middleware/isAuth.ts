@@ -29,26 +29,26 @@ export function isAuth(collectionName: string, operations: Operation[]): Middlew
     } 
     
     //resolve user's role
-    const role = user.role;
+    const role = user.role as Role;
 
-    // const permsFromRole = role.permissions;
+    const permsFromRole = role!.permissions as Permission[];
 
-    // //resolve permission to check from collectionName
-    // let permissionToCheck: Permission | null = null;
-    // for await (const perm of permsFromRole){
-    //   if(perm?.collectionName === collectionName){
-    //     permissionToCheck = perm;
-    //     break;
-    //   }
-    // }
+    //resolve permission to check from collectionName
+    let permissionToCheck: Permission | null = null;
+    for await (const perm of permsFromRole){
+      if(perm?.collectionName === collectionName){
+        permissionToCheck = perm;
+        break;
+      }
+    }
 
-    // console.log(permissionToCheck!);
-    // //fail fast if null or false on ANY operation
-    // for(const operation of operations){
-    //   if(!permissionToCheck || (!permissionToCheck[operation])){
-    //     throw new Error(`Not Authorized to perform ${operation} operation on ${collectionName}`);
-    //   }
-    // }
+    console.log(permissionToCheck!);
+    //fail fast if null or false on ANY operation
+    for(const operation of operations){
+      if(!permissionToCheck || (!permissionToCheck[operation])){
+        throw new Error(`Not Authorized to perform ${operation} operation on ${collectionName}`);
+      }
+    }
     
 
     return next();

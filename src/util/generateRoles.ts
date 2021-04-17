@@ -8,13 +8,13 @@ const generatePermissionsForFile = async (fullPath: string, role: PermissionObje
   
   const name = basename(fullPath, '.ts');
 
-  const perm = await (await PermissionModel.create({
+  const perm = await PermissionModel.create({
     collectionName: name, //collectionName 
     create: role.create, //create
     read: role.read, //read
     update: role.update, //update
     delete: role.delete //delete
-  })).save();
+  });
 
   return perm;
 };

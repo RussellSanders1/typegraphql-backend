@@ -2,17 +2,11 @@ import {ApolloServer} from 'apollo-server-express';
 import Express from 'express';
 import mongoose from 'mongoose';
 import 'reflect-metadata';
-import {UserResolver} from './resolvers/user/UserCrud';
-import {LoginResolver} from './resolvers/user/Login';
-import {RegisterResolver} from './resolvers/user/Register';
-import {buildSchema} from 'type-graphql';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import {redis} from './redis';
 import cors from 'cors';
-import {MeResolver} from './resolvers/user/Me';
 import {generateRoles} from './util/generateRoles';
-import {RoleResolver} from './resolvers/role/RoleCrud';
 import {createSchema} from './util/createSchema';
 import {generateAdmin} from './util/generateAdminAccount';
 import dotenv from 'dotenv';
@@ -23,7 +17,6 @@ const main = async () => {
     throw new Error('problem setting up environment variables');
   }
   const schema = await createSchema();
-  
   
   const server = new ApolloServer({
     schema,

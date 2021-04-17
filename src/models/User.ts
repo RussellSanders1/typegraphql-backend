@@ -1,13 +1,11 @@
-import {getModelForClass, prop as Prop, DocumentType} from '@typegoose/typegoose';
+import {getModelForClass, prop as Prop, DocumentType, Ref, plugin} from '@typegoose/typegoose';
 import {IsEmail} from 'class-validator';
-import {generateToken} from '../resolvers/user/helpers';
-import {Field, ID, Int, ObjectType, Root, } from 'type-graphql';
-import {Role, RoleModel} from './Role';
-import {Ref} from '../types/Ref';
-import {ObjectId} from 'mongoose';
-
+import {Field, ID, ObjectType, Root, } from 'type-graphql';
+import {Role} from './Role';
+import autopopulate from 'mongoose-autopopulate';
 
 @ObjectType({ description: 'User model'})
+@plugin(autopopulate)
 export class User {
     @Field(() => ID)
     id: string;
@@ -38,9 +36,13 @@ export class User {
     createdAt: Date;
 
     @Field(() => Role)
-    @Prop({required: true, type: () => [Role]}) 
+    @Prop({ref: () => Role, autopopulate: true}) 
     role: Ref<Role>;
 
+  // @Field(() => Role)
+  // async role(@Root() user: any): Promise<Role | null> {
+  //   return RoleModel.findById(user.roleID); 
+  // }
   // @Field()
   // token?(): string{
   //   return generateToken(this);
