@@ -38,7 +38,7 @@ export class RegisterResolver{
       lastName,
       password,
       createdAt: new Date(),
-      roleID: publicRole._id
+      role: publicRole
     })).save();
 
     return newUser;
