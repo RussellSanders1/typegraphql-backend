@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "postinstall": "ts-node-script src/util/setupLocalFiles.ts",
+    "postinstall": "npm run regen-husky",
+    "regen-husky": "ts-node-script src/util/generateHuskyHooks.ts",
+    "regen-husky-force": "ts-node-script src/util/replaceHuskyHooks.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-dev --respawn -r tsconfig-paths/register src/index.ts",
     "build": "tsc --project ./",
