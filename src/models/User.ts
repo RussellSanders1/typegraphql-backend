@@ -1,4 +1,4 @@
-import {getModelForClass, prop as Prop, DocumentType, Ref, plugin} from '@typegoose/typegoose';
+import {getModelForClass, prop as Prop, Ref, plugin} from '@typegoose/typegoose';
 import {IsEmail} from 'class-validator';
 import {Field, ID, ObjectType, Root, } from 'type-graphql';
 import {Role} from './Role';

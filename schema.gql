@@ -31,6 +31,7 @@ type Permission {
   collectionName: String!
   create: Boolean
   delete: Boolean
+  id: ID!
   read: Boolean
   update: Boolean
 }
@@ -62,6 +63,7 @@ input RegisterInput {
 
 """Role model"""
 type Role {
+  id: ID!
   name: String!
   permissions: [Permission!]!
 }

@@ -5,7 +5,6 @@ import {RegisterInput} from './inputs';
 import {UserInputError} from 'apollo-server';
 import bcrypt from 'bcryptjs';
 import {RoleModel} from '@models/Role';
-import {UserResolver} from './UserCrud';
 
 @Resolver(() => User)
 export class RegisterResolver{

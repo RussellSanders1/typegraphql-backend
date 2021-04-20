@@ -1,5 +1,5 @@
-import {getModelForClass, modelOptions, plugin, prop as Prop, Ref } from '@typegoose/typegoose';
-import {Field, ObjectType, } from 'type-graphql';
+import {getModelForClass, plugin, prop as Prop, Ref } from '@typegoose/typegoose';
+import {Field, ID, ObjectType, } from 'type-graphql';
 import {Permission} from './Permission';
 import autopopulate from 'mongoose-autopopulate';
 
@@ -32,7 +32,9 @@ export const DefaultRolePermissions: PermissionObject[] = [
 @ObjectType({ description: 'Role model'})
 @plugin(autopopulate)
 export class Role {
-
+    @Field(() => ID)
+    id: string;
+    
     @Field()
     @Prop({required: true})
     name: string;

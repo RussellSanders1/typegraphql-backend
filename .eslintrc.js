@@ -1,6 +1,7 @@
 module.exports = {
   plugins: [
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'unused-imports'
   ],
   extends: [
     'plugin:@typescript-eslint/recommended'
@@ -15,7 +16,13 @@ module.exports = {
       }
     ],
     semi: ['warn', 'always'],
-    '@typescript-eslint/explicit-module-boundary-types': 'off'
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+    ]
   },
   parserOptions: {
     ecmaVersion: 2020,

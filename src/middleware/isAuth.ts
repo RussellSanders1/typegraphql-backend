@@ -1,9 +1,8 @@
-import {User, UserModel} from '../models/User';
+import { UserModel} from '../models/User';
 import { MiddlewareFn } from 'type-graphql';
 
 import { MyContext } from '@contexts/MyContext';
-import {DocumentType, isRefType} from '@typegoose/typegoose';
-import {Role, RoleModel} from '@models/Role';
+import {Role} from '@models/Role';
 import {Permission} from '@models/Permission';
 
 export enum Operation{

@@ -1,5 +1,5 @@
 import { InputType, Field } from 'type-graphql';
-import { Equals, IsEmail, Length, MinLength } from 'class-validator';
+import { IsEmail, Length, MinLength } from 'class-validator';
 import {User} from '../../models/User';
 import {Match} from '../../util/validators/MatchValidator';
 import {IsEmailUnique} from './validators/EmailValidator';

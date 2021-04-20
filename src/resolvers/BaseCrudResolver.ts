@@ -1,9 +1,7 @@
 import {ReturnModelType, DocumentType} from '@typegoose/typegoose';
 import {BeAnObject} from '@typegoose/typegoose/lib/types';
-import {GraphQLJSONObject} from 'graphql-type-json';
 import {UpdateQuery} from 'mongoose';
-import {InputType} from 'node:zlib';
-import {Arg, Int, Mutation, Query, Resolver, ClassType, UseMiddleware, ResolverInterface} from 'type-graphql';
+import {Arg, Int, Mutation, Query, Resolver, ClassType, UseMiddleware} from 'type-graphql';
 import {MiddlewareFn} from 'type-graphql/dist/interfaces/Middleware';
 import {isAuth, Operation} from '../middleware/isAuth';
 

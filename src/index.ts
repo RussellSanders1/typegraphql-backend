@@ -8,9 +8,8 @@ import {redis} from './redis';
 import cors from 'cors';
 import {generateRoles} from './util/generateRoles';
 import {createSchema} from './util/createSchema';
-import {generateAdmin} from './util/generateAdminAccount';
+import {generateAdmin} from './util/generateAdmin';
 import dotenv from 'dotenv';
-import {collectionNames} from '@util/collectionNames';
 
 const main = async () => {
   const env = dotenv.config();
@@ -59,10 +58,9 @@ const main = async () => {
     }).then(async () => {
       await generateRoles();
       await generateAdmin();
-      console.log({collectionNames});
     });
 };
 
 main().catch((e) => {
-  console.log({e});
+  console.error({e});
 });
